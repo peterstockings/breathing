@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 
 function Breath(props) {
     const states = props.states
+    const displaySettings = props.displaySettings
 
     const [scale, setScale] = useState(0)
     const [stage, setStage] = useState(0)
@@ -40,6 +41,7 @@ function Breath(props) {
 
     return (
         <div>
+            <button className="button is-light" onClick={displaySettings}>return</button>
             <svg viewBox="-1 -1 2 2" preserveAspectRatio="xMidYMid meet" style={{ transform: `scale(${scale})` }}>
                 <circle r="1"></circle>
             </svg>

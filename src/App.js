@@ -3,44 +3,57 @@ import 'bulma/css/bulma.css'
 import './Settings/Settings'
 import Settings from './Settings/Settings';
 import Breath from './Breath/Breath'
-
+import { useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 function App() {
 
   let breathStates = [
     {
-      title: 'in',
+      name: 'In',
       f: t => t,
       duration: 4,
       idx: 0
     },
     {
-      title: 'hold',
+      name: 'Hold empty',
       f: t => 1,
       duration: 7,
       idx: 1
     },
     {
-      title: 'out',
+      name: 'Out',
       f: t => (1 - t) < 0.01 ? 0.01 : 1 - t,
       duration: 8,
       idx: 2
     },
     {
-      title: 'hold',
+      name: 'Hold full',
       f: t => 0.01,
       duration: 7,
       idx: 3
     }
   ]
 
+  const [states, setStates] = useState(breathStates)
+
+  const [breath, setBreath] = useState(false)
+
+  const startBreath = (newStates) => {
+    setStates(newStates)
+    setBreath(!breath)
+  }
+
+  const displaySettings = () => setBreath(false)
+
   return (
-    <div className="container ">
-
-      <Settings />
-      <Breath states={breathStates} />
-
-
+    <div className="container">
+      {breath ? <Breath states={states} displaySettings={displaySettings} /> : <Settings states={states} updateState={startBreath} />}
     </div>
   );
 }
