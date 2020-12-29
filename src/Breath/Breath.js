@@ -11,6 +11,8 @@ function Breath(props) {
     const [scale, setScale] = useState(0)
     const [stage, setStage] = useState(0)
 
+    const timeStampRef = useRef(performance.now())
+
     const requestRef = useRef()
 
     let totalTime = 0
@@ -20,7 +22,7 @@ function Breath(props) {
     }
 
     const draw = (t) => {
-        const time = t / 1000 % totalTime
+        const time = (t - timeStampRef.current) / 1000 % totalTime
 
         const state = states.find(s => time < s.endTime)
 
@@ -39,9 +41,22 @@ function Breath(props) {
         return () => cancelAnimationFrame(requestRef.current);
     }, []);
 
+    const resetTimer = e => {
+        timeStampRef.current = performance.now()
+    }
+
     return (
         <div>
-            <button className="button is-light" onClick={displaySettings}>return</button>
+            <button className="button is-white" onClick={displaySettings}>
+                <span className="icon is-small">
+                    <i className="fa fa-arrow-left"></i>
+                </span>
+            </button>
+            <button className="button is-white" style={{ float: 'right' }} onClick={resetTimer}>
+                <span className="icon is-small">
+                    <i className="fa fa-refresh"></i>
+                </span>
+            </button>
             <svg viewBox="-1 -1 2 2" preserveAspectRatio="xMidYMid meet" style={{ transform: `scale(${scale})` }}>
                 <circle r="1"></circle>
             </svg>
