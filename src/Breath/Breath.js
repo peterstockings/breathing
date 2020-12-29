@@ -47,12 +47,12 @@ function Breath(props) {
 
     return (
         <div>
-            <button className="button is-white" onClick={displaySettings}>
+            <button className="button is-info is-light" onClick={displaySettings}>
                 <span className="icon is-small">
                     <i className="fa fa-arrow-left"></i>
                 </span>
             </button>
-            <button className="button is-white" style={{ float: 'right' }} onClick={resetTimer}>
+            <button className="button is-info is-light" style={{ float: 'right' }} onClick={resetTimer}>
                 <span className="icon is-small">
                     <i className="fa fa-refresh"></i>
                 </span>
