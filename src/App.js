@@ -5,6 +5,7 @@ import Settings from './Settings/Settings';
 import Breath from './Breath/Breath'
 import { useState } from 'react';
 
+
 function App() {
 
   let breathStates = [
@@ -12,25 +13,29 @@ function App() {
       name: 'In',
       f: t => t,
       duration: 4,
-      idx: 0
+      idx: 0,
+      id: '574a2367-decc-424f-aead-72ff66ea0b07'
     },
     {
-      name: 'Hold empty',
+      name: 'Hold',
       f: t => 1,
       duration: 7,
-      idx: 1
+      idx: 1,
+      id: '1dc9883d-03fa-47bf-866c-980f6b2c59e2'
     },
     {
       name: 'Out',
       f: t => (1 - t) < 0.01 ? 0.01 : 1 - t,
       duration: 8,
-      idx: 2
+      idx: 2,
+      id: 'fcb25b76-4db0-4902-82e3-293513a333d6'
     },
     {
-      name: 'Hold full',
+      name: 'Hold',
       f: t => 0.01,
       duration: 7,
-      idx: 3
+      idx: 3,
+      id: 'e154f772-4636-4bf7-8212-8477cfc59729'
     }
   ]
 

@@ -9,7 +9,7 @@ function Breath(props) {
     const displaySettings = props.displaySettings
 
     const [scale, setScale] = useState(0)
-    const [stage, setStage] = useState(0)
+    const [stage, setStage] = useState('')
 
     const timeStampRef = useRef(performance.now())
 
@@ -31,7 +31,7 @@ function Breath(props) {
         const scaled = Math.sin(Math.sin(radius * Math.PI / 2))
 
         setScale(scaled.toFixed(4))
-        setStage(state.idx)
+        setStage(state.id)
 
         requestAnimationFrame(draw)
     }
@@ -61,7 +61,7 @@ function Breath(props) {
                 <circle r="1"></circle>
             </svg>
 
-            <BreathProgress stage={stage} />
+            <BreathProgress states={states} stage={stage} />
         </div >);
 }
 
