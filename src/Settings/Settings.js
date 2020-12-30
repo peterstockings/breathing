@@ -3,6 +3,9 @@ import 'bulma/css/bulma.css'
 import Slider from '@material-ui/core/Slider';
 import { useState } from 'react';
 import uuid from '../util'
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+
+let getLast = (arr = null, n = null) => { if (arr == null) return void 0; if (n === null) return arr[arr.length - 1]; return arr.slice(Math.max(arr.length - n, 0)); };
 
 function LabelAndSlider(props) {
     return (
@@ -16,10 +19,51 @@ function LabelAndSlider(props) {
     )
 }
 
+function BreathingStageDropDown(props) {
+    let last = getLast(props.states)
+    if (last == undefined)
+        return (
+            <DropdownMenu>
+                <DropdownItem onClick={e => props.addStage('In')}>In</DropdownItem>
+                <DropdownItem disabled onClick={e => props.addStage('Out')}>Out</DropdownItem>
+                <DropdownItem disabled onClick={e => props.addStage('Hold')}>Hold</DropdownItem>
+            </DropdownMenu>)
+
+    if (last.name === 'In')
+        return (
+            <DropdownMenu>
+                <DropdownItem disabled onClick={e => props.addStage('In')}>In</DropdownItem>
+                <DropdownItem onClick={e => props.addStage('Out')}>Out</DropdownItem>
+                <DropdownItem onClick={e => props.addStage('Hold')}>Hold</DropdownItem>
+            </DropdownMenu>
+        )
+
+    if (last.name === 'Out')
+        return (
+            <DropdownMenu>
+                <DropdownItem onClick={e => props.addStage('In')}>In</DropdownItem>
+                <DropdownItem disabled onClick={e => props.addStage('Out')}>Out</DropdownItem>
+                <DropdownItem onClick={e => props.addStage('Hold')}>Hold</DropdownItem>
+            </DropdownMenu>
+        )
+
+
+    return (
+        <DropdownMenu>
+            <DropdownItem onClick={e => props.addStage('In')}>In</DropdownItem>
+            <DropdownItem onClick={e => props.addStage('Out')}>Out</DropdownItem>
+            <DropdownItem onClick={e => props.addStage('Hold')}>Hold</DropdownItem>
+        </DropdownMenu>
+    )
+}
+
 function Settings(props) {
     const updateState = props.updateState
 
     const [states, setStates] = useState(props.states)
+    const [dropdownOpen, setOpen] = useState(false);
+
+    const toggle = () => setOpen(!dropdownOpen);
 
     const getDuration = (id) => states.find(s => s.id === id).duration
 
@@ -28,6 +72,20 @@ function Settings(props) {
     const handleDelete = (id) => setStates(states.filter(s => s.id !== id))
 
     const handleClick = () => updateState(states)
+
+    const addStage = (name) => {
+        let last = getLast(states);
+        console.log('states', states)
+        console.log('name', name)
+        console.log('last', last)
+        setStates(states.concat({
+            name,
+            f: t => t,
+            duration: 1,
+            idx: states.reduce((a, c) => c.idx > a ? c.idx : a, 0) + 1,
+            id: uuid()
+        }))
+    }
 
     return (
         <div>
@@ -42,8 +100,13 @@ function Settings(props) {
                     key={s.id}
                 />
             )}
-
-            <button className="button is-dark" onClick={handleClick}>Start</button>
+            <ButtonDropdown isOpen={dropdownOpen} toggle={toggle} style={{ position: 'absolute', right: 0 }}>
+                <DropdownToggle caret>
+                    Add
+                </DropdownToggle>
+                <BreathingStageDropDown states={states} addStage={addStage} />
+            </ButtonDropdown>
+            <button disabled={states.length === 0} className="button is-dark" onClick={handleClick}>Start</button>
 
         </div>);
 }
