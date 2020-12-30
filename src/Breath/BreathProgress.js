@@ -16,7 +16,7 @@ function BreathProgress(props) {
     }
 
     return (
-        <ul className="steps is-narrow is-medium is-centered has-content-centered">
+        <ul className="steps  is-medium is-centered has-content-centered is-horizontal">
             {states.map(s =>
                 <li className={`steps-segment ${props.stage === s.id ? 'is-active' : ''}`} key={s.id}>
                     <span className="steps-marker">
