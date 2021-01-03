@@ -3,6 +3,8 @@ import 'bulma/css/bulma.css'
 import Slider from '@material-ui/core/Slider';
 import { useState } from 'react';
 import uuid from '../util'
+import Modal from '../Modal'
+import ActionsInAccordionSummary from '../Accordion'
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 let getLast = (arr = null, n = null) => { if (arr == null) return void 0; if (n === null) return arr[arr.length - 1]; return arr.slice(Math.max(arr.length - n, 0)); };
@@ -20,7 +22,7 @@ function LabelAndSlider(props) {
     return (
         <p>
             <span>
-                <a className="delete" style={{ position: 'absolute', right: 0 }} onClick={props.onDelete}></a>
+                <a className="delete" style={{ float: 'right' }} onClick={props.onDelete}></a>
                 <label className="label">{props.name}</label>
             </span>
             <Slider value={props.value} onChange={props.onChange} aria-labelledby="discrete-slider-always" valueLabelDisplay="on" step={1} min={0} max={10} />
@@ -72,11 +74,13 @@ function Settings(props) {
     const updateState = props.updateState
 
     const [states, setStates] = useState(props.states)
+    const [exercises, setExercises] = useState(props.exercises)
     const [dropdownOpen, setOpen] = useState(false);
+    const [isModalVisible, setModalVisibility] = useState(false)
 
     const toggle = () => setOpen(!dropdownOpen);
 
-    const getDuration = (id) => states.find(s => s.id === id).duration
+    const getDuration = (id) => states.find(s => s.id === id)?.duration || 0
 
     const handleChange = (id, newValue) => setStates(states.map(s => s.id === id ? { ...s, duration: newValue } : s))
 
@@ -85,7 +89,6 @@ function Settings(props) {
     const handleClick = () => updateState(states)
 
     const addStage = (name) => {
-        let last = getLast(states);
         let breathingPos = getCurrentPosition(states)
 
         const getTimerFn = (name, pos) => {
@@ -114,22 +117,49 @@ function Settings(props) {
         <div>
             <h2 className="title is-2">Breathing</h2>
 
-            {states.map(s =>
-                <LabelAndSlider
-                    name={s.name}
-                    value={getDuration(s.id)}
-                    onChange={(event, newValue) => handleChange(s.id, newValue)}
-                    onDelete={event => handleDelete(s.id)}
-                    key={s.id}
-                />
-            )}
-            <ButtonDropdown isOpen={dropdownOpen} toggle={toggle} style={{ position: 'absolute', right: 0 }}>
-                <DropdownToggle caret>
-                    Add
+            <Modal isActive={isModalVisible} close={e => setModalVisibility(false)}>
+                <article className="message">
+                    <div className="message-header">
+                        <p>New exercise</p>
+                        <button className="delete" aria-label="delete" onClick={e => setModalVisibility(false)}></button>
+                    </div>
+                    <div className="message-body">
+                        <div class="field">
+                            <label class="label">Name</label>
+                            <div class="control">
+                                <input class="input" type="text" placeholder="Breathing exercise name" />
+                            </div>
+                        </div>
+
+                        {states.map(s =>
+                            <LabelAndSlider
+                                name={s.name}
+                                value={getDuration(s.id)}
+                                onChange={(event, newValue) => handleChange(s.id, newValue)}
+                                onDelete={event => handleDelete(s.id)}
+                                key={s.id}
+                            />
+                        )}
+                        <ButtonDropdown isOpen={dropdownOpen} toggle={toggle} style={{ float: 'right' }}>
+                            <DropdownToggle caret>
+                                Add
                 </DropdownToggle>
-                <BreathingStageDropDown states={states} addStage={addStage} />
-            </ButtonDropdown>
-            <button disabled={states.length === 0 || getCurrentPosition(states) !== 0} className="button is-dark" onClick={handleClick}>Start</button>
+                            <BreathingStageDropDown states={states} addStage={addStage} />
+                        </ButtonDropdown>
+                        <button disabled={states.length === 0 || getCurrentPosition(states) !== 0} className="button is-dark" onClick={handleClick}>Save</button>
+                    </div>
+                </article>
+            </Modal>
+
+            <ActionsInAccordionSummary exercises={exercises} onSelect={updateState} />
+
+            <a href="#" className="float" onClick={e => setModalVisibility(true)} >
+                <i className="fa fa-plus my-float"></i>
+                <div className="label-container">
+                    <div className="label-text">New exercise</div>
+                    <i className="fa fa-play label-arrow"></i>
+                </div>
+            </a>
 
         </div>);
 }
