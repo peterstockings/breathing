@@ -1,97 +1,13 @@
 import '../App.css';
 import 'bulma/css/bulma.css'
-import Slider from '@material-ui/core/Slider';
 import { useState } from 'react';
-import uuid from '../util'
+import { uuid, getCurrentPosition } from '../util'
 import Modal from '../Modal'
 import ActionsInAccordionSummary from '../Accordion'
-import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-
-let getLast = (arr = null, n = null) => { if (arr == null) return void 0; if (n === null) return arr[arr.length - 1]; return arr.slice(Math.max(arr.length - n, 0)); };
-
-const getCurrentPosition = (states) => {
-    let mappings = {
-        'In': 1,
-        'Hold': 0,
-        'Out': -1,
-    }
-    return states.reduce((a, c) => a + mappings[c.name], 0)
-}
-
-function LabelAndSlider(props) {
-    return (
-        <p>
-            <span>
-                <a className="delete" style={{ float: 'right' }} onClick={props.onDelete}></a>
-                <label className="label">{props.name}</label>
-            </span>
-            <Slider value={props.value} onChange={props.onChange} aria-labelledby="discrete-slider-always" valueLabelDisplay="on" step={1} min={0} max={10} />
-        </p>
-    )
-}
-
-function BreathingStageDropDown(props) {
-    let last = getLast(props.states)
-
-    let breathingPos = getCurrentPosition(props.states)
-
-    if (last === undefined)
-        return (
-            <DropdownMenu>
-                <DropdownItem onClick={e => props.addStage('In')}>In</DropdownItem>
-                <DropdownItem disabled onClick={e => props.addStage('Out')}>Out</DropdownItem>
-                <DropdownItem onClick={e => props.addStage('Hold')}>Hold</DropdownItem>
-            </DropdownMenu>)
-
-    if (breathingPos === 1)
-        return (
-            <DropdownMenu>
-                <DropdownItem disabled onClick={e => props.addStage('In')}>In</DropdownItem>
-                <DropdownItem onClick={e => props.addStage('Out')}>Out</DropdownItem>
-                <DropdownItem disabled={last.name === 'Hold'} onClick={e => props.addStage('Hold')}>Hold</DropdownItem>
-            </DropdownMenu>
-        )
-
-    if (breathingPos === 0)
-        return (
-            <DropdownMenu>
-                <DropdownItem onClick={e => props.addStage('In')}>In</DropdownItem>
-                <DropdownItem disabled onClick={e => props.addStage('Out')}>Out</DropdownItem>
-                <DropdownItem disabled={last.name === 'Hold'} onClick={e => props.addStage('Hold')}>Hold</DropdownItem>
-            </DropdownMenu>
-        )
-
-    return (
-        <DropdownMenu>
-            <DropdownItem onClick={e => props.addStage('In')}>In</DropdownItem>
-            <DropdownItem onClick={e => props.addStage('Out')}>Out</DropdownItem>
-            <DropdownItem disabled onClick={e => props.addStage('Hold')}>Hold</DropdownItem>
-        </DropdownMenu>
-    )
-}
-
-function createDefaultExercise() {
-    return {
-        name: 'Custom',
-        id: uuid(),
-        exercise: [
-            {
-                name: 'In',
-                f: t => t,
-                duration: 1,
-                idx: 0,
-                id: uuid()
-            },
-            {
-                name: 'Out',
-                f: t => (1 - t) < 0.01 ? 0.01 : 1 - t,
-                duration: 2,
-                idx: 2,
-                id: uuid()
-            }
-        ]
-    }
-}
+import { ButtonDropdown, DropdownToggle } from 'reactstrap';
+import { createDefaultExercise } from '../defaults'
+import BreathingStageDropDown from './BreathingStageDropDown'
+import LabelAndSlider from './LabelAndSlider'
 
 function Settings(props) {
     const updateState = props.updateState
@@ -109,7 +25,7 @@ function Settings(props) {
         }
     )
 
-    const handleDelete = (id, newValue) => updateNewExercise(
+    const handleDelete = (id) => updateNewExercise(
         {
             ...newExercise,
             exercise: newExercise.exercise.filter(s => s.id !== id)
@@ -191,7 +107,7 @@ function Settings(props) {
                         <DropdownToggle caret>
                             Add
                             </DropdownToggle>
-                        <BreathingStageDropDown states={states} addStage={addStage} />
+                        <BreathingStageDropDown states={newExercise.exercise} addStage={addStage} />
                     </ButtonDropdown>
 
                     <button disabled={newExercise.exercise.length === 0 || getCurrentPosition(newExercise.exercise) !== 0 || newExercise.name.length === 0} className="button is-dark" onClick={handleClick}>Save</button>
