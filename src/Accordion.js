@@ -43,8 +43,8 @@ export default function ActionsInAccordionSummary(props) {
                             onFocus={(event) => event.stopPropagation()}
                             control={
                                 <button className="button is-white">
-                                    <span class="icon">
-                                        <i class="fa fa-play"></i>
+                                    <span className="icon">
+                                        <i className="fa fa-play"></i>
                                     </span>
                                 </button>
                             }
@@ -64,8 +64,8 @@ export default function ActionsInAccordionSummary(props) {
                             )}
                         </ul>
                         <button className="button is-white" onClick={(event) => handleDelete(event, exercise)}>
-                            <span class="icon">
-                                <i class="fa fa-trash-o"></i>
+                            <span className="icon">
+                                <i className="fa fa-trash-o"></i>
                             </span>
                         </button>
                     </AccordionDetails>

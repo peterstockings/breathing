@@ -4,6 +4,7 @@ import './Settings/Settings'
 import Settings from './Settings/Settings';
 import Breath from './Breath/Breath'
 import { useState } from 'react';
+import { loadState, saveState } from './localStorage'
 
 
 function App() {
@@ -110,7 +111,12 @@ function App() {
     }
   ]
 
-  const [exercises, setExercises] = useState(exerciseList)
+  const [exercises, setExercises] = useState(loadState() || exerciseList)
+
+  const saveUpdatedExercises = (updatedExercises) => {
+    setExercises(updatedExercises)
+    saveState(updatedExercises)
+  }
 
   const [states, setStates] = useState(breathStates)
 
@@ -125,7 +131,7 @@ function App() {
 
   return (
     <div className="container">
-      {breath ? <Breath states={states} displaySettings={displaySettings} /> : <Settings states={states} updateState={startBreath} exercises={exercises} updateExercises={setExercises} />}
+      {breath ? <Breath states={states} displaySettings={displaySettings} /> : <Settings states={states} updateState={startBreath} exercises={exercises} updateExercises={saveUpdatedExercises} />}
     </div>
   );
 }
