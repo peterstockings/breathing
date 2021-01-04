@@ -70,26 +70,72 @@ function BreathingStageDropDown(props) {
     )
 }
 
+function createDefaultExercise() {
+    return {
+        name: 'Custom',
+        id: uuid(),
+        exercise: [
+            {
+                name: 'In',
+                f: t => t,
+                duration: 1,
+                idx: 0,
+                id: uuid()
+            },
+            {
+                name: 'Out',
+                f: t => (1 - t) < 0.01 ? 0.01 : 1 - t,
+                duration: 2,
+                idx: 2,
+                id: uuid()
+            }
+        ]
+    }
+}
+
 function Settings(props) {
     const updateState = props.updateState
 
-    const [states, setStates] = useState(props.states)
+    const [newExercise, updateNewExercise] = useState(createDefaultExercise())
+
+    const updateExerciseName = (name) => updateNewExercise({ ...newExercise, name })
+
+    const getDuration = (id) => newExercise.exercise.find(s => s.id === id)?.duration || 0
+
+    const handleChange = (id, newValue) => updateNewExercise(
+        {
+            ...newExercise,
+            exercise: newExercise.exercise.map(s => s.id === id ? { ...s, duration: newValue } : s)
+        }
+    )
+
+    const handleDelete = (id, newValue) => updateNewExercise(
+        {
+            ...newExercise,
+            exercise: newExercise.exercise.filter(s => s.id !== id)
+        }
+    )
+
+    const deleteExercise = (id) => {
+        props.updateExercises(props.exercises.filter(s => s.id !== id))
+    }
+
     const [exercises, setExercises] = useState(props.exercises)
     const [dropdownOpen, setOpen] = useState(false);
     const [isModalVisible, setModalVisibility] = useState(false)
 
+    const handleClick = () => {
+        setModalVisibility(false);
+        props.updateExercises(props.exercises.concat(newExercise))
+        updateNewExercise(createDefaultExercise())
+    }
+
+    const [states, setStates] = useState(props.states)
+
     const toggle = () => setOpen(!dropdownOpen);
 
-    const getDuration = (id) => states.find(s => s.id === id)?.duration || 0
-
-    const handleChange = (id, newValue) => setStates(states.map(s => s.id === id ? { ...s, duration: newValue } : s))
-
-    const handleDelete = (id) => setStates(states.filter(s => s.id !== id))
-
-    const handleClick = () => updateState(states)
-
     const addStage = (name) => {
-        let breathingPos = getCurrentPosition(states)
+        let breathingPos = getCurrentPosition(newExercise.exercise)
 
         const getTimerFn = (name, pos) => {
             if (name === 'In')
@@ -104,13 +150,18 @@ function Settings(props) {
             }
         }
 
-        setStates(states.concat({
-            name,
-            f: getTimerFn(name, breathingPos),
-            duration: 1,
-            idx: states.reduce((a, c) => c.idx > a ? c.idx : a, 0) + 1,
-            id: uuid()
-        }))
+        updateNewExercise(
+            {
+                ...newExercise,
+                exercise: newExercise.exercise.concat({
+                    name,
+                    f: getTimerFn(name, breathingPos),
+                    duration: 1,
+                    idx: newExercise.exercise.reduce((a, c) => c.idx > a ? c.idx : a, 0) + 1,
+                    id: uuid()
+                })
+            }
+        )
     }
 
     return (
@@ -118,40 +169,36 @@ function Settings(props) {
             <h2 className="title is-2">Breathing</h2>
 
             <Modal isActive={isModalVisible} close={e => setModalVisibility(false)}>
-                <article className="message">
-                    <div className="message-header">
-                        <p>New exercise</p>
-                        <button className="delete" aria-label="delete" onClick={e => setModalVisibility(false)}></button>
-                    </div>
-                    <div className="message-body">
-                        <div class="field">
-                            <label class="label">Name</label>
-                            <div class="control">
-                                <input class="input" type="text" placeholder="Breathing exercise name" />
-                            </div>
+                <div className="box">
+                    <div className="field">
+                        <label className="label">Name</label>
+                        <div className="control">
+                            <input className="input" type="text" value={newExercise.name} onChange={(e) => updateExerciseName(e.target.value)} placeholder="Breathing exercise name" />
                         </div>
-
-                        {states.map(s =>
-                            <LabelAndSlider
-                                name={s.name}
-                                value={getDuration(s.id)}
-                                onChange={(event, newValue) => handleChange(s.id, newValue)}
-                                onDelete={event => handleDelete(s.id)}
-                                key={s.id}
-                            />
-                        )}
-                        <ButtonDropdown isOpen={dropdownOpen} toggle={toggle} style={{ float: 'right' }}>
-                            <DropdownToggle caret>
-                                Add
-                </DropdownToggle>
-                            <BreathingStageDropDown states={states} addStage={addStage} />
-                        </ButtonDropdown>
-                        <button disabled={states.length === 0 || getCurrentPosition(states) !== 0} className="button is-dark" onClick={handleClick}>Save</button>
                     </div>
-                </article>
+
+                    {newExercise.exercise.map(s =>
+                        <LabelAndSlider
+                            name={s.name}
+                            value={getDuration(s.id)}
+                            onChange={(event, newValue) => handleChange(s.id, newValue)}
+                            onDelete={event => handleDelete(s.id)}
+                            key={s.id}
+                        />
+                    )}
+
+                    <ButtonDropdown isOpen={dropdownOpen} toggle={toggle} style={{ float: 'right' }}>
+                        <DropdownToggle caret>
+                            Add
+                            </DropdownToggle>
+                        <BreathingStageDropDown states={states} addStage={addStage} />
+                    </ButtonDropdown>
+
+                    <button disabled={newExercise.exercise.length === 0 || getCurrentPosition(newExercise.exercise) !== 0 || newExercise.name.length === 0} className="button is-dark" onClick={handleClick}>Save</button>
+                </div>
             </Modal>
 
-            <ActionsInAccordionSummary exercises={exercises} onSelect={updateState} />
+            <ActionsInAccordionSummary exercises={props.exercises} onSelect={updateState} onDelete={deleteExercise} />
 
             <a href="#" className="float" onClick={e => setModalVisibility(true)} >
                 <i className="fa fa-plus my-float"></i>

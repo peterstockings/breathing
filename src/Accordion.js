@@ -19,8 +19,12 @@ export default function ActionsInAccordionSummary(props) {
 
     const handleClick = (event, exercise) => {
         event.stopPropagation()
-        console.log(exercise)
         props.onSelect(exercise.exercise)
+    }
+
+    const handleDelete = (event, exercise) => {
+        event.stopPropagation()
+        props.onDelete(exercise.id)
     }
 
     return (
@@ -59,6 +63,11 @@ export default function ActionsInAccordionSummary(props) {
                                 </li>
                             )}
                         </ul>
+                        <button className="button is-white" onClick={(event) => handleDelete(event, exercise)}>
+                            <span class="icon">
+                                <i class="fa fa-trash-o"></i>
+                            </span>
+                        </button>
                     </AccordionDetails>
                 </Accordion>
             )}
