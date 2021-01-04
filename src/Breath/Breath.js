@@ -2,7 +2,7 @@ import '../App.css';
 import 'bulma/css/bulma.css'
 import BreathProgress from './BreathProgress';
 import { useState, useEffect, useRef } from 'react';
-
+import { timerFunction } from '../defaults'
 
 function Breath(props) {
     const states = props.states
@@ -27,7 +27,8 @@ function Breath(props) {
         const state = states.find(s => time < s.endTime)
 
         const startTime = state.endTime - state.duration
-        const radius = state.f((time - startTime) / state.duration)
+        let f = timerFunction(state.f)
+        const radius = f((time - startTime) / state.duration)
         const scaled = Math.sin(Math.sin(radius * Math.PI / 2))
 
         setScale(scaled.toFixed(4))

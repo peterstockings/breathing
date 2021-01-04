@@ -1,7 +1,7 @@
 import '../App.css';
 import 'bulma/css/bulma.css'
 import { useState } from 'react';
-import { uuid, getCurrentPosition } from '../util'
+import { uuid, getCurrentPosition, getTimerFn } from '../util'
 import Modal from '../Modal'
 import ActionsInAccordionSummary from '../Accordion'
 import { ButtonDropdown, DropdownToggle } from 'reactstrap';
@@ -51,27 +51,12 @@ function Settings(props) {
     const toggle = () => setOpen(!dropdownOpen);
 
     const addStage = (name) => {
-        let breathingPos = getCurrentPosition(newExercise.exercise)
-
-        const getTimerFn = (name, pos) => {
-            if (name === 'In')
-                return t => t
-            if (name === 'Out')
-                return t => (1 - t) < 0.01 ? 0.01 : 1 - t
-            if (name === 'Hold') {
-                if (pos === 0)
-                    return t => 0.01
-                if (pos === 1)
-                    return t => 1
-            }
-        }
-
         updateNewExercise(
             {
                 ...newExercise,
                 exercise: newExercise.exercise.concat({
                     name,
-                    f: getTimerFn(name, breathingPos),
+                    f: getTimerFn(name, newExercise.exercise),
                     duration: 1,
                     idx: newExercise.exercise.reduce((a, c) => c.idx > a ? c.idx : a, 0) + 1,
                     id: uuid()

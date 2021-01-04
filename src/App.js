@@ -5,11 +5,11 @@ import Settings from './Settings/Settings';
 import Breath from './Breath/Breath'
 import { useState } from 'react';
 import { loadState, saveState } from './localStorage'
-import { exerciseList, createDefaultExercise } from './defaults'
+import { getDefaultExerciseList, createDefaultExercise } from './defaults'
 
 
 function App() {
-  const [exercises, setExercises] = useState(loadState() || exerciseList)
+  const [exercises, setExercises] = useState(loadState() || getDefaultExerciseList())
   const [states, setStates] = useState(createDefaultExercise())
 
   const saveUpdatedExercises = (updatedExercises) => {
