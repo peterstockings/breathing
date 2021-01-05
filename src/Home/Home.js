@@ -8,17 +8,20 @@ import { ButtonDropdown, DropdownToggle } from 'reactstrap';
 import { createDefaultExercise } from '../defaults'
 import BreathingStageDropDown from './BreathingStageDropDown'
 import LabelAndSlider from './LabelAndSlider'
+import { useHistory } from 'react-router-dom';
 
-function Settings(props) {
-    const updateState = props.updateState
+function Home(props) {
+    const history = useHistory();
 
     const [newExercise, updateNewExercise] = useState(createDefaultExercise())
+    const [dropdownOpen, setOpen] = useState(false);
+    const [isModalVisible, setModalVisibility] = useState(false)
 
     const updateExerciseName = (name) => updateNewExercise({ ...newExercise, name })
 
     const getDuration = (id) => newExercise.exercise.find(s => s.id === id)?.duration || 0
 
-    const handleChange = (id, newValue) => updateNewExercise(
+    const updateDuration = (id, newValue) => updateNewExercise(
         {
             ...newExercise,
             exercise: newExercise.exercise.map(s => s.id === id ? { ...s, duration: newValue } : s)
@@ -41,10 +44,8 @@ function Settings(props) {
         setModalVisibility(true);
     }
 
-    const [dropdownOpen, setOpen] = useState(false);
-    const [isModalVisible, setModalVisibility] = useState(false)
-
-    const handleClick = () => {
+    const onSave = () => {
+        // Update existing exercise or add new
         let newExercises = props.exercises.filter(s => s.id !== newExercise.id).concat(newExercise).sort((a, b) => a.idx - b.idx)
         setModalVisibility(false);
         props.updateExercises(newExercises)
@@ -73,9 +74,13 @@ function Settings(props) {
         updateNewExercise(createDefaultExercise())
     }
 
+    const onSelect = (exercise) => {
+        history.push('/breath')
+        props.updateState(exercise)
+    }
+
     return (
         <div>
-            <h2 className="title is-2">Breathing</h2>
 
             <Modal isActive={isModalVisible} close={closeModal}>
                 <div className="box">
@@ -90,7 +95,7 @@ function Settings(props) {
                         <LabelAndSlider
                             name={s.name}
                             value={getDuration(s.id)}
-                            onChange={(event, newValue) => handleChange(s.id, newValue)}
+                            onChange={(event, newValue) => updateDuration(s.id, newValue)}
                             onDelete={event => handleDelete(s.id)}
                             key={s.id}
                         />
@@ -103,11 +108,11 @@ function Settings(props) {
                         <BreathingStageDropDown states={newExercise.exercise} addStage={addStage} />
                     </ButtonDropdown>
 
-                    <button disabled={newExercise.exercise.length === 0 || getCurrentPosition(newExercise.exercise) !== 0 || newExercise.name.length === 0} className="button is-dark" onClick={handleClick}>Save</button>
+                    <button disabled={newExercise.exercise.length === 0 || getCurrentPosition(newExercise.exercise) !== 0 || newExercise.name.length === 0} className="button is-dark" onClick={onSave}>Save</button>
                 </div>
             </Modal>
 
-            <ActionsInAccordionSummary exercises={props.exercises} onSelect={updateState} onDelete={deleteExercise} onEdit={editExercise} />
+            <ActionsInAccordionSummary exercises={props.exercises} onSelect={onSelect} onDelete={deleteExercise} onEdit={editExercise} />
 
             <a href="#" className="float" onClick={e => setModalVisibility(true)} >
                 <i className="fa fa-plus my-float"></i>
@@ -120,4 +125,4 @@ function Settings(props) {
         </div>);
 }
 
-export default Settings;
+export default Home;

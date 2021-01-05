@@ -16,10 +16,8 @@ export const timerFunction = (breathingStage) => {
     }
     if (breathingStage in Breathing)
         return functions[breathingStage]
-    throw 'Unsupported timer function'
+    throw new Error("Unsupported timer function");
 }
-
-//export const getTimerFunction
 
 export const getDefaultExerciseList = () => [
     {

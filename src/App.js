@@ -1,34 +1,38 @@
 import './App.css';
 import 'bulma/css/bulma.css'
-import './Settings/Settings'
-import Settings from './Settings/Settings';
+import Home from './Home/Home';
 import Breath from './Breath/Breath'
+import Navbar from './Navbar'
 import { useState } from 'react';
 import { loadState, saveState } from './localStorage'
 import { getDefaultExerciseList, createDefaultExercise } from './defaults'
-
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 function App() {
   const [exercises, setExercises] = useState(loadState() || getDefaultExerciseList())
-  const [states, setStates] = useState(createDefaultExercise())
+  const [selectedExercise, setSelectedExercise] = useState(createDefaultExercise().exercise)
 
   const saveUpdatedExercises = (updatedExercises) => {
     setExercises(updatedExercises)
     saveState(updatedExercises)
   }
 
-  const [breath, setBreath] = useState(false)
-
-  const startBreath = (newStates) => {
-    setStates(newStates)
-    setBreath(!breath)
-  }
-
-  const displaySettings = () => setBreath(false)
-
   return (
-    <div className="container">
-      {breath ? <Breath states={states} displaySettings={displaySettings} /> : <Settings states={states} updateState={startBreath} exercises={exercises} updateExercises={saveUpdatedExercises} />}
+    <div>
+      <Navbar />
+
+      <div className="container" style={{ paddingTop: '2em' }}>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/breath">
+              <Breath selectedExercise={selectedExercise} />
+            </Route>
+            <Route path="/">
+              <Home updateState={setSelectedExercise} exercises={exercises} updateExercises={saveUpdatedExercises} />
+            </Route>
+          </Switch>
+        </BrowserRouter>
+      </div>
     </div>
   );
 }

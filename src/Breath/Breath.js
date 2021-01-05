@@ -3,10 +3,10 @@ import 'bulma/css/bulma.css'
 import BreathProgress from './BreathProgress';
 import { useState, useEffect, useRef } from 'react';
 import { timerFunction } from '../defaults'
+import { useHistory } from 'react-router-dom';
 
 function Breath(props) {
-    const states = props.states
-    const displaySettings = props.displaySettings
+    const history = useHistory();
 
     const [scale, setScale] = useState(0)
     const [stage, setStage] = useState('')
@@ -16,7 +16,7 @@ function Breath(props) {
     const requestRef = useRef()
 
     let totalTime = 0
-    for (const state of states) {
+    for (const state of props.selectedExercise) {
         totalTime += state.duration
         state.endTime = totalTime
     }
@@ -24,7 +24,7 @@ function Breath(props) {
     const draw = (t) => {
         const time = (t - timeStampRef.current) / 1000 % totalTime
 
-        const state = states.find(s => time < s.endTime)
+        const state = props.selectedExercise.find(s => time < s.endTime)
 
         const startTime = state.endTime - state.duration
         let f = timerFunction(state.f)
@@ -48,11 +48,6 @@ function Breath(props) {
 
     return (
         <div>
-            <button className="button is-info is-light" onClick={displaySettings}>
-                <span className="icon is-small">
-                    <i className="fa fa-arrow-left"></i>
-                </span>
-            </button>
             <button className="button is-info is-light" style={{ float: 'right' }} onClick={resetTimer}>
                 <span className="icon is-small">
                     <i className="fa fa-refresh"></i>
@@ -62,8 +57,9 @@ function Breath(props) {
                 <circle r="1"></circle>
             </svg>
 
-            <BreathProgress states={states} stage={stage} />
-        </div >);
+            <BreathProgress selectedExercise={props.selectedExercise} stage={stage} />
+        </div >
+    );
 }
 
 export default Breath;

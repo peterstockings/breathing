@@ -8,13 +8,13 @@ export const uuid = () => {
 
 export const getLast = (arr = null, n = null) => { if (arr == null) return void 0; if (n === null) return arr[arr.length - 1]; return arr.slice(Math.max(arr.length - n, 0)); };
 
-export const getCurrentPosition = (states) => {
+export const getCurrentPosition = (exerciseList) => {
     let mappings = {
         'In': 1,
         'Hold': 0,
         'Out': -1,
     }
-    return states.reduce((a, c) => a + mappings[c.name], 0)
+    return exerciseList.reduce((a, c) => a + mappings[c.name], 0)
 }
 
 export const getTimerFn = (name, exerciseList) => {
