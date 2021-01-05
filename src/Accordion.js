@@ -27,6 +27,11 @@ export default function ActionsInAccordionSummary(props) {
         props.onDelete(exercise.id)
     }
 
+    const handleEdit = (event, exercise) => {
+        event.stopPropagation()
+        props.onEdit(exercise)
+    }
+
     return (
         <div className={classes.root}>
             {props.exercises.map(exercise =>
@@ -63,11 +68,20 @@ export default function ActionsInAccordionSummary(props) {
                                 </li>
                             )}
                         </ul>
-                        <button className="button is-white" onClick={(event) => handleDelete(event, exercise)}>
-                            <span className="icon">
-                                <i className="fa fa-trash-o"></i>
-                            </span>
-                        </button>
+                        <span>
+                            <p>
+                                <button className="button is-white" onClick={(event) => handleEdit(event, exercise)}>
+                                    <span className="icon">
+                                        <i className="fa fa-pencil-square-o"></i>
+                                    </span>
+                                </button>
+                                <button className="button is-white" onClick={(event) => handleDelete(event, exercise)}>
+                                    <span className="icon">
+                                        <i className="fa fa-trash-o"></i>
+                                    </span>
+                                </button>
+                            </p>
+                        </span>
                     </AccordionDetails>
                 </Accordion>
             )}

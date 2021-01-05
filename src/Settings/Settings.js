@@ -36,17 +36,20 @@ function Settings(props) {
         props.updateExercises(props.exercises.filter(s => s.id !== id))
     }
 
-    const [exercises, setExercises] = useState(props.exercises)
+    const editExercise = (exercise) => {
+        updateNewExercise({ ...exercise })
+        setModalVisibility(true);
+    }
+
     const [dropdownOpen, setOpen] = useState(false);
     const [isModalVisible, setModalVisibility] = useState(false)
 
     const handleClick = () => {
+        let newExercises = props.exercises.filter(s => s.id !== newExercise.id).concat(newExercise).sort((a, b) => a.idx - b.idx)
         setModalVisibility(false);
-        props.updateExercises(props.exercises.concat(newExercise))
+        props.updateExercises(newExercises)
         updateNewExercise(createDefaultExercise())
     }
-
-    const [states, setStates] = useState(props.states)
 
     const toggle = () => setOpen(!dropdownOpen);
 
@@ -65,11 +68,16 @@ function Settings(props) {
         )
     }
 
+    const closeModal = () => {
+        setModalVisibility(false)
+        updateNewExercise(createDefaultExercise())
+    }
+
     return (
         <div>
             <h2 className="title is-2">Breathing</h2>
 
-            <Modal isActive={isModalVisible} close={e => setModalVisibility(false)}>
+            <Modal isActive={isModalVisible} close={closeModal}>
                 <div className="box">
                     <div className="field">
                         <label className="label">Name</label>
@@ -99,7 +107,7 @@ function Settings(props) {
                 </div>
             </Modal>
 
-            <ActionsInAccordionSummary exercises={props.exercises} onSelect={updateState} onDelete={deleteExercise} />
+            <ActionsInAccordionSummary exercises={props.exercises} onSelect={updateState} onDelete={deleteExercise} onEdit={editExercise} />
 
             <a href="#" className="float" onClick={e => setModalVisibility(true)} >
                 <i className="fa fa-plus my-float"></i>
