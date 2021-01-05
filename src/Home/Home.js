@@ -74,9 +74,10 @@ function Home(props) {
         updateNewExercise(createDefaultExercise())
     }
 
-    const onSelect = (exercise) => {
+    const onSelect = (id) => {
+        let selectedExercises = props.exercises.map(s => s.id === id ? { ...s, selected: true } : { ...s, selected: false })
+        props.updateExercises(selectedExercises)
         history.push('/breath')
-        props.updateState(exercise)
     }
 
     return (

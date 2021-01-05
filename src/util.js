@@ -1,4 +1,4 @@
-import { Breathing, timerFunctions } from './defaults'
+import { Breathing } from './defaults'
 
 export const uuid = () => {
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
@@ -19,14 +19,14 @@ export const getCurrentPosition = (exerciseList) => {
 
 export const getTimerFn = (name, exerciseList) => {
     if (name === 'In')
-        return t => t
+        return Breathing.IN
     if (name === 'Out')
-        return t => (1 - t) < 0.01 ? 0.01 : 1 - t
+        return Breathing.OUT
     if (name === 'Hold') {
         let pos = getCurrentPosition(exerciseList)
         if (pos === 0)
-            return t => 0.01
+            return Breathing.HOLDEMPTY
         if (pos === 1)
-            return t => 1
+            return Breathing.HOLDFULL
     }
 }

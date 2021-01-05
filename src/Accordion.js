@@ -8,18 +8,19 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import './App.css';
 import 'bulma/css/bulma.css'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
     },
-});
+}));
+
 
 export default function ActionsInAccordionSummary(props) {
     const classes = useStyles();
 
     const handleClick = (event, exercise) => {
         event.stopPropagation()
-        props.onSelect(exercise.exercise)
+        props.onSelect(exercise.id)
     }
 
     const handleDelete = (event, exercise) => {

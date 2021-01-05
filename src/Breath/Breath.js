@@ -16,7 +16,7 @@ function Breath(props) {
     const requestRef = useRef()
 
     let totalTime = 0
-    for (const state of props.selectedExercise) {
+    for (const state of props.selectedExercise.exercise) {
         totalTime += state.duration
         state.endTime = totalTime
     }
@@ -24,7 +24,7 @@ function Breath(props) {
     const draw = (t) => {
         const time = (t - timeStampRef.current) / 1000 % totalTime
 
-        const state = props.selectedExercise.find(s => time < s.endTime)
+        const state = props.selectedExercise.exercise.find(s => time < s.endTime)
 
         const startTime = state.endTime - state.duration
         let f = timerFunction(state.f)
@@ -57,7 +57,7 @@ function Breath(props) {
                 <circle r="1"></circle>
             </svg>
 
-            <BreathProgress selectedExercise={props.selectedExercise} stage={stage} />
+            <BreathProgress selectedExercise={props.selectedExercise.exercise} stage={stage} />
         </div >
     );
 }

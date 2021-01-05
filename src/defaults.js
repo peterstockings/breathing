@@ -23,6 +23,7 @@ export const getDefaultExerciseList = () => [
     {
         name: '4-7-8',
         id: uuid(),
+        selected: true,
         exercise: [
             {
                 name: 'In',
@@ -57,6 +58,7 @@ export const getDefaultExerciseList = () => [
     {
         name: 'Box',
         id: uuid(),
+        selected: false,
         exercise: [
             {
                 name: 'In',
@@ -94,6 +96,7 @@ export function createDefaultExercise() {
     return {
         name: 'Custom',
         id: uuid(),
+        selected: false,
         exercise: [
             {
                 name: 'In',
