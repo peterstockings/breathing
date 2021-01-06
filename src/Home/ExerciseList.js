@@ -5,7 +5,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import './App.css';
+import '../App.css';
 import 'bulma/css/bulma.css'
 
 const useStyles = makeStyles((theme) => ({
@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function ActionsInAccordionSummary(props) {
+export default function ExerciseList(props) {
     const classes = useStyles();
 
     const handleClick = (event, exercise) => {
@@ -41,7 +41,6 @@ export default function ActionsInAccordionSummary(props) {
                         expandIcon={<ExpandMoreIcon />}
                         aria-label="Expand"
                         aria-controls="additional-actions1-content"
-                        id="additional-actions1-header"
                     >
                         <FormControlLabel
                             aria-label="Acknowledge"
