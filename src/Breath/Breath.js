@@ -3,6 +3,7 @@ import 'bulma/css/bulma.css'
 import BreathProgress from './BreathProgress';
 import { useState, useEffect, useRef } from 'react';
 import { timerFunction } from '../defaults'
+import { getPercentage, getScale } from '../util'
 
 function Breath(props) {
     const [scale, setScale] = useState(0)
@@ -23,17 +24,16 @@ function Breath(props) {
         const time = (t - timeStampRef.current) / 1000 % totalTime
 
         const state = props.selectedExercise.exercise.find(s => time < s.endTime)
+        setStage(state.id)
 
         const startTime = state.endTime - state.duration
 
-        setPercentage(Math.floor(((time - startTime) / state.duration) * 100))
-
         let f = timerFunction(state.f)
-        const radius = f((time - startTime) / state.duration)
-        const scaled = Math.sin(Math.sin(radius * Math.PI / 2))
+        const scaled = getScale(f, time, startTime, state.duration)
+        setScale(scaled)
 
-        setScale(scaled.toFixed(4))
-        setStage(state.id)
+        const newPercentage = getPercentage(time, startTime, state.duration)
+        setPercentage(newPercentage)
 
         requestAnimationFrame(draw)
     }
@@ -55,7 +55,6 @@ function Breath(props) {
                 </svg>
 
                 <BreathProgress selectedExercise={props.selectedExercise.exercise} stage={stage} />
-
             </div>
             <progress className="progress is-small is-info fixedBottomBar" value={percentage} max="100"></progress>
         </>

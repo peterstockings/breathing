@@ -22,18 +22,16 @@ function App() {
     <div>
       <Navbar />
 
-      <div>
-        <BrowserRouter>
-          <Switch>
-            <Route path="/breath">
-              <Breath selectedExercise={selectedExercise} />
-            </Route>
-            <Route path="/">
-              <Home exercises={exercises} updateExercises={saveUpdatedExercises} />
-            </Route>
-          </Switch>
-        </BrowserRouter>
-      </div>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/breath">
+            <Breath selectedExercise={selectedExercise} />
+          </Route>
+          <Route path="/">
+            <Home exercises={exercises} updateExercises={saveUpdatedExercises} />
+          </Route>
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 }

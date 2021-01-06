@@ -30,3 +30,11 @@ export const getTimerFn = (name, exerciseList) => {
             return Breathing.HOLDFULL
     }
 }
+
+export const getPercentage = (current, start, duration) => ((current - start) / duration) * 100
+
+export const getScale = (func, current, start, duration) => {
+    const radius = func((current - start) / duration)
+    const scaled = Math.sin(Math.sin(radius * Math.PI / 2))
+    return scaled.toFixed(4)
+}
