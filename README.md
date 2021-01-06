@@ -2,7 +2,7 @@
   <img alt="" src="https://github.com/peterstockings/breathing/blob/master/public/breath.png?raw=true" width="200px" height="200px" />
   <br /><br />
   Breathing app</h1>
-<p align="center">Train breathing techniques</p>
+<p align="center">https://breathing-app-peter.herokuapp.com/</p>
 <br />
 
 ## Features
