@@ -42,7 +42,7 @@ function Home(props) {
     const openModal = () => setModalVisibility(true)
 
     return (
-        <div>
+        <div className="container" style={{ paddingTop: '2em' }}>
             <ExerciseModal
                 modalExercise={modalExercise}
                 updateModalExercise={updateModalExercise}

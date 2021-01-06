@@ -22,7 +22,7 @@ function App() {
     <div>
       <Navbar />
 
-      <div className="container" style={{ paddingTop: '2em' }}>
+      <div>
         <BrowserRouter>
           <Switch>
             <Route path="/breath">

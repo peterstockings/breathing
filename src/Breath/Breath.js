@@ -3,13 +3,11 @@ import 'bulma/css/bulma.css'
 import BreathProgress from './BreathProgress';
 import { useState, useEffect, useRef } from 'react';
 import { timerFunction } from '../defaults'
-import { useHistory } from 'react-router-dom';
 
 function Breath(props) {
-    const history = useHistory();
-
     const [scale, setScale] = useState(0)
     const [stage, setStage] = useState('')
+    const [percentage, setPercentage] = useState(0)
 
     const timeStampRef = useRef(performance.now())
 
@@ -27,6 +25,9 @@ function Breath(props) {
         const state = props.selectedExercise.exercise.find(s => time < s.endTime)
 
         const startTime = state.endTime - state.duration
+
+        setPercentage(Math.floor(((time - startTime) / state.duration) * 100))
+
         let f = timerFunction(state.f)
         const radius = f((time - startTime) / state.duration)
         const scaled = Math.sin(Math.sin(radius * Math.PI / 2))
@@ -47,18 +48,17 @@ function Breath(props) {
     }
 
     return (
-        <div>
-            <button className="button is-info is-light" style={{ float: 'right' }} onClick={resetTimer}>
-                <span className="icon is-small">
-                    <i className="fa fa-refresh"></i>
-                </span>
-            </button>
-            <svg viewBox="-1 -1 2 2" preserveAspectRatio="xMidYMid meet" style={{ transform: `scale(${scale})` }}>
-                <circle r="1"></circle>
-            </svg>
+        <>
+            <div onClick={resetTimer}>
+                <svg viewBox="-1 -1 2 2" preserveAspectRatio="xMidYMid meet" style={{ transform: `scale(${scale})` }} onClick={resetTimer}>
+                    <circle r="1"></circle>
+                </svg>
 
-            <BreathProgress selectedExercise={props.selectedExercise.exercise} stage={stage} />
-        </div >
+                <BreathProgress selectedExercise={props.selectedExercise.exercise} stage={stage} />
+
+            </div>
+            <progress className="progress is-small is-info fixedBottomBar" value={percentage} max="100"></progress>
+        </>
     );
 }
 

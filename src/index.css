@@ -69,3 +69,9 @@ circle {
 	color:#333;
 	opacity:0.5;
 }
+
+.fixedBottomBar {
+	position: absolute;
+	bottom: 0;
+	height: 0.5rem;
+}
