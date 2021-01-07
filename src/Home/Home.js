@@ -29,9 +29,11 @@ function Home(props) {
     }
 
     const onSave = () => {
-        let updatedExercises = props.exercises.filter(s => s.id !== modalExercise.id).concat(modalExercise).sort((a, b) => a.idx - b.idx)
+        if (props.exercises.some(s => s => s.id === modalExercise.id))
+            props.updateExercises(props.exercises.map(s => s.id === modalExercise.id ? modalExercise : s))
+        else
+            props.updateExercises(props.exercises.concat(modalExercise))
         setModalVisibility(false);
-        props.updateExercises(updatedExercises)
     }
 
     const onModalClose = () => {
