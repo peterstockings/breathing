@@ -29,7 +29,7 @@ function Home(props) {
     }
 
     const onSave = () => {
-        if (props.exercises.some(s => s => s.id === modalExercise.id))
+        if (props.exercises.some(s => s.id === modalExercise.id))
             props.updateExercises(props.exercises.map(s => s.id === modalExercise.id ? modalExercise : s))
         else
             props.updateExercises(props.exercises.concat(modalExercise))

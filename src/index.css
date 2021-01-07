@@ -75,3 +75,8 @@ circle {
 	bottom: 0;
 	height: 0.5rem;
 }
+
+.sliderPadding {
+	display: flex;
+    width: 95%;
+}

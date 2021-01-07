@@ -5,12 +5,12 @@ import Breath from './Breath/Breath'
 import Navbar from './Navbar'
 import { useState } from 'react';
 import { loadState, saveState } from './localStorage'
-import { getDefaultExerciseList } from './defaults'
+import { getDefaultExerciseList, createDefaultExercise } from './defaults'
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 function App() {
   const [exercises, setExercises] = useState(loadState() || getDefaultExerciseList())
-  const [selectedExercise, setSelectedExercise] = useState(exercises.find(e => e.selected))
+  const [selectedExercise, setSelectedExercise] = useState(exercises.find(e => e.selected) || createDefaultExercise())
 
   const saveUpdatedExercises = (updatedExercises) => {
     setExercises(updatedExercises)

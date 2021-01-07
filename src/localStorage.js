@@ -4,7 +4,11 @@ export const loadState = () => {
         if (serializedState === null) {
             return undefined;
         }
-        return JSON.parse(serializedState);
+        return JSON.parse(serializedState, (key, value) => {
+            return key === 'loops' && value === null
+                ? Number.POSITIVE_INFINITY
+                : value
+        })
     } catch (err) {
         return undefined;
     }

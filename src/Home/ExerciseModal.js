@@ -15,6 +15,8 @@ function ExerciseModal(props) {
 
     const updateExerciseName = (name) => props.updateModalExercise({ ...props.modalExercise, name })
 
+    const updateExerciseLoops = (loops) => props.updateModalExercise({ ...props.modalExercise, loops: loops > 10 ? Number.POSITIVE_INFINITY : loops })
+
     const getDuration = (id) => props.modalExercise.exercise.find(s => s.id === id)?.duration || 0
 
     const updateDuration = (id, newValue) => props.updateModalExercise(
@@ -59,6 +61,20 @@ function ExerciseModal(props) {
                         <input className="input" type="text" value={props.modalExercise.name} onChange={(e) => updateExerciseName(e.target.value)} placeholder="Breathing exercise name" />
                     </div>
                 </div>
+
+                <LabelAndSlider
+                    name={'Loops'}
+                    value={props.modalExercise.loops}
+                    onChange={(_, newValue) => updateExerciseLoops(newValue)}
+                    marks={[{
+                        value: 11,
+                        label: 'Inf',
+                    }]}
+                    max={11}
+                    valueLabelFormat={value => value === 11 ? `Inf` : value}
+                />
+
+                <hr />
 
                 {props.modalExercise.exercise.map(s =>
                     <LabelAndSlider

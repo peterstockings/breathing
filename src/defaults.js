@@ -24,6 +24,7 @@ export const getDefaultExerciseList = () => [
         name: '4-7-8',
         id: uuid(),
         selected: true,
+        loops: Number.POSITIVE_INFINITY,
         exercise: [
             {
                 name: 'In',
@@ -59,6 +60,7 @@ export const getDefaultExerciseList = () => [
         name: 'Box',
         id: uuid(),
         selected: false,
+        loops: Number.POSITIVE_INFINITY,
         exercise: [
             {
                 name: 'In',
@@ -97,6 +99,7 @@ export function createDefaultExercise() {
         name: 'Custom',
         id: uuid(),
         selected: false,
+        loops: Number.POSITIVE_INFINITY,
         exercise: [
             {
                 name: 'In',
