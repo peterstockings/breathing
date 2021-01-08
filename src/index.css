@@ -80,3 +80,23 @@ circle {
 	display: flex;
     width: 95%;
 }
+
+.loopCountLabel {
+    position: absolute;
+    right: 4em;
+	padding-top: 0.5em;
+	color: #6b6b6b;
+}
+
+.restartButton {
+	position: absolute !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.breathLoopRemaining {
+	position: absolute;
+	top: 5em;
+	right: 1.5em
+}

@@ -9,6 +9,7 @@ function Breath(props) {
     const [scale, setScale] = useState(0)
     const [stage, setStage] = useState('')
     const [percentage, setPercentage] = useState(0)
+    const [loopCounter, setLoopCounter] = useState(0)
 
     const timeStampRef = useRef(performance.now())
 
@@ -21,7 +22,10 @@ function Breath(props) {
     }
 
     const draw = (t) => {
-        const time = (t - timeStampRef.current) / 1000 % totalTime
+        const timeSinceBeginning = (t - timeStampRef.current) / 1000
+        const time = timeSinceBeginning % totalTime
+        const loopCount = Math.floor(timeSinceBeginning / totalTime)
+        setLoopCounter(props.selectedExercise.loops - loopCount)
 
         const state = props.selectedExercise.exercise.find(s => time < s.endTime)
         setStage(state.id)
@@ -49,14 +53,32 @@ function Breath(props) {
 
     return (
         <>
-            <div onClick={resetTimer}>
-                <svg viewBox="-1 -1 2 2" preserveAspectRatio="xMidYMid meet" style={{ transform: `scale(${scale})` }} onClick={resetTimer}>
-                    <circle r="1"></circle>
-                </svg>
+            {loopCounter > 0 ?
+                <>
+                    <div onClick={resetTimer}>
 
-                <BreathProgress selectedExercise={props.selectedExercise.exercise} stage={stage} />
-            </div>
-            <progress className="progress is-small is-info fixedBottomBar" value={percentage} max="100"></progress>
+                        <svg viewBox="-1 -1 2 2" preserveAspectRatio="xMidYMid meet" style={{ transform: `scale(${scale})` }} onClick={resetTimer}>
+                            <circle r="1"></circle>
+                        </svg>
+
+                        <BreathProgress selectedExercise={props.selectedExercise.exercise} stage={stage} />
+                    </div>
+                    <span className="breathLoopRemaining">
+                        {props.selectedExercise.loops === Number.POSITIVE_INFINITY ? '' : `x${loopCounter}`
+                        }
+                    </span>
+
+                    <progress className="progress is-small is-info fixedBottomBar" value={percentage} max="100"></progress>
+                </> :
+                <button className="button is-success restartButton" onClick={resetTimer}>
+                    <span className="icon">
+                        <i className="fa fa-repeat"></i>
+                    </span>
+                    <span>Restart</span>
+                </button>
+
+            }
+
         </>
     );
 }

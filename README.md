@@ -8,7 +8,7 @@
 ## Features
 - [x] Add/remove/edit breathing exercises
 - [x] Store exercises in local storage
-- [ ] Duration for breathing exercises
+- [x] Duration for breathing exercises
 
 ## Local installation
 

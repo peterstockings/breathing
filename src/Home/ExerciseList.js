@@ -55,6 +55,9 @@ export default function ExerciseList(props) {
                             }
                             label={exercise.name}
                         />
+                        <span className="loopCountLabel">
+                            {exercise.loops === Number.POSITIVE_INFINITY ? '∞' : `x${exercise.loops}`}
+                        </span>
                     </AccordionSummary>
                     <AccordionDetails>
                         <ul className="steps is-centered has-content-centered is-horizonta" style={{ width: '100%' }}>
