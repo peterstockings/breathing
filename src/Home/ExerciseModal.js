@@ -2,6 +2,7 @@ import '../App.css';
 import 'bulma/css/bulma.css'
 import Modal from '../Modal'
 import LabelAndSlider from './LabelAndSlider'
+import LoopLabelAndSlider from './LoopLabelAndSlider'
 import { ButtonDropdown, DropdownToggle } from 'reactstrap';
 import { useState } from 'react';
 import { createDefaultExercise } from '../defaults'
@@ -62,17 +63,7 @@ function ExerciseModal(props) {
                     </div>
                 </div>
 
-                <LabelAndSlider
-                    name={'Loops'}
-                    value={props.modalExercise.loops}
-                    onChange={(_, newValue) => updateExerciseLoops(newValue)}
-                    marks={[{
-                        value: 11,
-                        label: 'Inf',
-                    }]}
-                    max={11}
-                    valueLabelFormat={value => value === 11 ? `Inf` : value}
-                />
+                <LoopLabelAndSlider value={props.modalExercise.loops} onChange={(newValue) => updateExerciseLoops(newValue)} />
 
                 <hr />
 
