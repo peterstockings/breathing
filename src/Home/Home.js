@@ -33,6 +33,7 @@ function Home(props) {
             props.updateExercises(props.exercises.map(s => s.id === modalExercise.id ? modalExercise : s))
         else
             props.updateExercises(props.exercises.concat(modalExercise))
+        updateModalExercise(createDefaultExercise())
         setModalVisibility(false);
     }
 

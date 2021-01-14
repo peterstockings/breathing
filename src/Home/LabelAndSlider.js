@@ -1,7 +1,8 @@
 import Slider from '@material-ui/core/Slider';
+import { sliderSettings } from '../defaults'
 
 function LabelAndSlider(props) {
-    const { step = 1, min = 0, max = 10 } = props
+    const { step = 1, min = sliderSettings.breath.min, max = sliderSettings.breath.max } = props
     return (
         <p>
             <span>

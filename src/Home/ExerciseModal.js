@@ -5,7 +5,6 @@ import LabelAndSlider from './LabelAndSlider'
 import LoopLabelAndSlider from './LoopLabelAndSlider'
 import { ButtonDropdown, DropdownToggle } from 'reactstrap';
 import { useState } from 'react';
-import { createDefaultExercise } from '../defaults'
 import BreathingStageDropDown from './BreathingStageDropDown'
 import { uuid, getCurrentPosition, getTimerFn } from '../util'
 
@@ -16,7 +15,7 @@ function ExerciseModal(props) {
 
     const updateExerciseName = (name) => props.updateModalExercise({ ...props.modalExercise, name })
 
-    const updateExerciseLoops = (loops) => props.updateModalExercise({ ...props.modalExercise, loops: loops > 10 ? Number.POSITIVE_INFINITY : loops })
+    const updateExerciseLoops = (loops) => props.updateModalExercise({ ...props.modalExercise, loops })
 
     const getDuration = (id) => props.modalExercise.exercise.find(s => s.id === id)?.duration || 0
 
@@ -48,13 +47,8 @@ function ExerciseModal(props) {
         props.updateModalExercise(updatedStages)
     }
 
-    const onClose = () => {
-        props.updateModalExercise(createDefaultExercise())
-        props.onClose()
-    }
-
     return (
-        <Modal isActive={props.isActive} close={e => onClose()}>
+        <Modal isActive={props.isActive} close={e => props.onClose()}>
             <div className="box">
                 <div className="field">
                     <label className="label">Name</label>

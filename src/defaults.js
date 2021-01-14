@@ -19,6 +19,11 @@ export const timerFunction = (breathingStage) => {
     throw new Error("Unsupported timer function");
 }
 
+export const sliderSettings = {
+    breath: { min: 0, max: 10 },
+    loops: { min: 0, max: 10 }
+}
+
 export const getDefaultExerciseList = () => [
     {
         name: '4-7-8',

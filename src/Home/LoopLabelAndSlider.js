@@ -1,9 +1,10 @@
 import LabelAndSlider from './LabelAndSlider'
+import { sliderSettings } from '../defaults'
 
 function LoopLabelAndSlider(props) {
-    //const { step = 1, min = 0, max = 10 } = props
+    const { step = 1, min = sliderSettings.loops.min + 1, max = sliderSettings.loops.max + 1 } = props
     const updateExerciseLoops = loops => {
-        let newLoops = loops > 10 ? Number.POSITIVE_INFINITY : loops
+        let newLoops = loops < max ? loops : Number.POSITIVE_INFINITY
         props.onChange(newLoops)
     }
 
@@ -13,11 +14,11 @@ function LoopLabelAndSlider(props) {
             value={props.value}
             onChange={(_, newValue) => updateExerciseLoops(newValue)}
             marks={[{
-                value: 11,
+                value: max,
                 label: 'Inf',
             }]}
-            max={11}
-            valueLabelFormat={value => value === 11 ? `Inf` : value}
+            max={max}
+            valueLabelFormat={value => value === max ? `Inf` : value}
         />
     )
 }
